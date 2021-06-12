@@ -1,0 +1,37 @@
+.input_section {
+  width: 100%;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  text-align: center;
+  padding: 5px;
+}
+
+.inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:0 0 5px 0;
+}
+
+input {
+  padding: 0;
+  margin: 0 5px ;
+  min-width: 19%;
+  // height: 40px;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: 2px;
+  }
+
+input[type="color"] {
+	-webkit-appearance: none;
+  vertical-align: sub;
+  min-width: auto;
+  height: 18px;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}

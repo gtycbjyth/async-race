@@ -1,0 +1,14 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 10vh;
+  // background-color: #2196f3;
+  margin: 10px 0;
+}
+
+.user__img {
+  border-radius: 50%;
+  width: 60px;
+}
+

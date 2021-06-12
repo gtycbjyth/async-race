@@ -1,0 +1,19 @@
+.car_road {
+  width: 100%;
+  border-bottom: 2px dashed #ff2800;
+  border-top: 1px solid black;
+}
+
+.road {
+  position: relative;
+  height: 35px;
+  >img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+}
+.car_control {
+  display: flex;
+  align-items: flex-start;
+}

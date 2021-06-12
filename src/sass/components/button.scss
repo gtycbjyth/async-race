@@ -1,0 +1,14 @@
+button {
+  width: 5rem;
+  margin: 0.1rem 0 0.1rem 2rem;
+
+  &.active {
+  background-color: #ff2800;
+  }
+  &:hover {
+    background-color: #ff2800;
+  }
+}
+.double_but{
+  display: contents;
+}

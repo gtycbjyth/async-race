@@ -1,0 +1,19 @@
+.popup__score {
+  border-bottom: 1px solid black;
+  display: flex;
+  height: 7vh;
+}
+.score__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: auto;
+  margin: 0 10px;
+}
+.score__results {
+  & p {
+    margin: 0 10px;
+  }
+display: flex;
+}
+
