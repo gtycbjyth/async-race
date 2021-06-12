@@ -1,0 +1,55 @@
+{
+  "name": "gem-puzzle",
+  "version": "1.0.0",
+  "description": "gem-puzzle",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-cli serve --config webpack.config.dev.js",
+    "prod": "webpack --mode=production --config webpack.config.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rolling-scopes-school/andreyamelchenia-JS2020Q3.git"
+  },
+  "keywords": [
+    "ts"
+  ],
+  "author": "Andrey Amelchenia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rolling-scopes-school/andreyamelchenia-JS2020Q3/issues"
+  },
+  "homepage": "https://github.com/rolling-scopes-school/andreyamelchenia-JS2020Q3#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-typescript": "^7.12.1",
+    "@typescript-eslint/parser": "^4.6.0",
+    "@webpack-cli/serve": "^1.0.1",
+    "autoprefixer": "^10.0.1",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.2.1",
+    "css-loader": "^5.0.0",
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb-typescript-prettier": "^3.1.0",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^1.2.1",
+    "optimize-css-assets-webpack-plugin": "^6.0.0",
+    "postcss-loader": "^4.0.4",
+    "prettier": "^2.1.2",
+    "prettier-webpack-plugin": "^1.2.0",
+    "sass": "^1.28.0",
+    "sass-loader": "^10.0.4",
+    "style-loader": "^2.0.0",
+    "terser-webpack-plugin": "^5.0.3",
+    "ts-loader": "^8.0.7",
+    "typescript": "^4.0.5",
+    "webpack": "^5.3.2",
+    "webpack-cli": "^4.1.0",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.2.0"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  }
+}
