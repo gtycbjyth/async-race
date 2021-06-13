@@ -1,4 +1,5 @@
 import UIData from '../data/UIData';
+import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
 import DoubleButton from '../model/class/doubleButton';
 import CarRoad from './car';
@@ -8,12 +9,25 @@ class RaceInfo {
 
   cars: CarRoad[];
 
+  pageButton: DoubleButton;
+
+  prevBtn: Button;
+
+  nextBtn: Button;
+
   constructor() {
     this.section = new CreateHTMLElement('section').element;
+    this.prevBtn = new Button('prev', 'prev');
+    this.nextBtn = new Button('next', 'next');
   }
 
   render(): void {
     this.section.innerHTML = '';
+    if (UIData.totalCars <= '7') {
+      this.prevBtn.element.disabled = true;
+      this.nextBtn.element.disabled = true;
+    }
+
     this.section.append(
       new CreateHTMLElement(
         'div',
@@ -23,7 +37,8 @@ class RaceInfo {
           Number(UIData.totalCars) / 7,
         )}`,
       ).element,
-      this.section.appendChild(new DoubleButton('page').doubleElement),
+      this.prevBtn.element,
+      this.nextBtn.element,
     );
   }
 

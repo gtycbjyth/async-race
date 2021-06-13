@@ -5,7 +5,8 @@ import Car from './car';
 import ControlPanel from './controlPanel';
 import RaceInfo from './raceInfo';
 // import inputUI from '../helper/inputUI';
-import { getCars } from '../api/garage';
+import { createCar, getCars } from '../api/garage';
+import generateOneHundredCars from '../helper/generateOneHundredCars ';
 
 class App {
   element: HTMLElement;
@@ -35,6 +36,14 @@ class App {
 
   async render(): Promise<void> {
     this.element.innerHTML = '';
+    // this.controlPanel.generateBtn.element.addEventListener('click', async () => {
+    //   // this.controlPanel.generateBtn.element.removeEventListener('click', () => {});
+    //   const oneHundredCar = generateOneHundredCars();
+    //   await oneHundredCar.forEach((el) => createCar(el));
+    //   await getCars();
+    //   await this.render();
+    // });
+    this.controlPanel.addListener(this.raceInfo);
     this.controlPanel.render();
     this.raceInfo.render();
     this.element.append(this.header, this.main, this.controlPanel.section, this.raceInfo.section);
@@ -54,8 +63,14 @@ class App {
           await getCars();
           await this.render();
         });
+        car.startBtn.element.addEventListener('click', async () => {
+          console.log(car);
+        });
+        car.stopBtn.element.addEventListener('click', async () => {
+          console.log(car);
+        });
       });
-      //===как пробрость this.render в родительскай класс===
+      //= ==как пробрость this.render в родительскай класс===
       // car.selectBtn.element.addEventListener('click', async () => {
       //   console.log(car);
       //   await car.reNameCar(this.render);

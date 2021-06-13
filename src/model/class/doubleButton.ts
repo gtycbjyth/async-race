@@ -1,12 +1,13 @@
+import UIData from '../../data/UIData';
 import { TCarParam } from '../types';
 import CreateHTMLElement from './createHTMLElement';
 
 class DoubleButton {
   doubleElement: HTMLElement;
 
-  buttonOne: HTMLElement;
+  buttonOne: CreateHTMLElement;
 
-  buttonTwo: HTMLElement;
+  buttonTwo: CreateHTMLElement;
 
   typeOne: string;
 
@@ -16,30 +17,24 @@ class DoubleButton {
 
   constructor(type = 'engine', car: TCarParam = { name: '', color: '', id: '' }) {
     this.type = type;
-    if (type !== 'engine') {
-      this.typeOne = 'prev';
-      this.typeTwo = 'next';
+    if (type === 'engine') {
+      this.buttonOne = new CreateHTMLElement('button', '', `${this.type}_start_${car.id}`, 'Start');
+      this.buttonTwo = new CreateHTMLElement('button', '', `${this.type}_stop_${car.id}`, 'Stop');
     } else {
-      this.typeOne = 'Start';
-      this.typeTwo = 'Stop';
+      this.buttonOne = new CreateHTMLElement('button', '', 'prev', 'prev');
+      this.buttonTwo = new CreateHTMLElement('button', '', 'next', 'next');
     }
+  }
 
-    this.buttonOne = new CreateHTMLElement(
-      'button',
-      '',
-      `${this.type}_start_${car.id}`,
-      `${this.typeOne}`,
-    ).element;
-
-    this.buttonTwo = new CreateHTMLElement(
-      'button',
-      '',
-      `${this.type}_stop_${car.id}`,
-      `${this.typeTwo}`,
-    ).element;
+  render(): void {
+    // const first = buttonOne.element;as HTMLInputElement
+    if (UIData.totalCars <= '7') {
+      this.buttonOne.element.disabled = true;
+      this.buttonTwo.element.disabled = true;
+    }
     this.doubleElement = new CreateHTMLElement('div', 'double_but').element;
-    this.doubleElement.appendChild(this.buttonOne);
-    this.doubleElement.appendChild(this.buttonTwo);
+    this.doubleElement.appendChild(this.buttonOne.element);
+    this.doubleElement.appendChild(this.buttonTwo.element);
   }
 }
 

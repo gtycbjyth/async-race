@@ -1,12 +1,23 @@
+import { createCar, getCars } from '../api/garage';
 import UIData from '../data/UIData';
+import generateOneHundredCars from '../helper/generateOneHundredCars ';
 import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
 
 class ControlPanel {
   section: HTMLElement;
 
+  raceBtn: Button;
+
+  resetBtn: Button;
+
+  generateBtn: Button;
+
   constructor() {
     this.section = new CreateHTMLElement('section', 'input_section').element;
+    this.raceBtn = new Button('race', 'race');
+    this.resetBtn = new Button('reset', 'reset');
+    this.generateBtn = new Button('generate', 'generate cars');
   }
 
   render(): void {
@@ -23,16 +34,29 @@ class ControlPanel {
       <input type="submit" id="update_car" value="update" disabled>
     </div>
     `;
-    this.section.append(
-      new Button('race', 'race').element,
-      new Button('reset', 'reset').element,
-      new Button('generate', 'generate cars').element,
-    );
+    this.section.append(this.raceBtn.element, this.resetBtn.element, this.generateBtn.element);
   }
 
   reRender(): void {
     this.section.innerHTML = '';
     this.render();
+  }
+
+  oneHundredCar(): void {
+    const oneHundredCar = generateOneHundredCars();
+    oneHundredCar.forEach((el) => createCar(el));
+    this.generateBtn.element.removeEventListener('click', () => {
+      this.oneHundredCar();
+    });
+    this.reRender();
+  }
+
+  addListener(raceInfo: any): void {
+    this.generateBtn.element.addEventListener('click', async () => {
+      await this.oneHundredCar();
+      await getCars();
+      await raceInfo.render();
+    });
   }
 }
 export default ControlPanel;

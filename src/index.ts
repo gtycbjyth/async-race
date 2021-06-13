@@ -1,11 +1,15 @@
 import './sass/style.scss';
 import App from './component/app';
+import { getCars } from './api/garage';
+import inputUI from './helper/inputUI';
 
-const appNew: App = new App();
+const appNew = new App();
 
-const start = async function () {
+async function start(): Promise<void> {
+  await getCars();
   await appNew.render();
-};
+  await inputUI(appNew);
+}
 
 start();
 

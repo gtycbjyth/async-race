@@ -1,4 +1,4 @@
-import { deleteCar, getCars, updateCar } from '../api/garage';
+import { deleteCar, updateCar } from '../api/garage';
 import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
 import DoubleButton from '../model/class/doubleButton';
@@ -17,20 +17,30 @@ class Car {
 
   selectBtn: Button;
 
+  engineBtn: DoubleButton;
+
+  startBtn: Button;
+
+  stopBtn: Button;
+
   constructor(car: TCarParam) {
     this.car = car;
     this.element = new CreateHTMLElement('div', 'car_road').element;
     this.removeBtn = new Button(`remove_${this.car.id}`, 'remove');
     this.selectBtn = new Button(`select_${this.car.id}`, 'select');
+    this.startBtn = new Button(`start_${this.car.id}`, 'start');
+    this.stopBtn = new Button(`stop_${this.car.id}`, 'stop');
   }
 
   render(): void {
     this.element.innerHTML = '';
+    if (true) this.stopBtn.element.disabled = true;
     this.control = new CreateHTMLElement('div', 'car_control').element;
-    this.control.appendChild(this.selectBtn.element);
-    this.control.appendChild(this.removeBtn.element);
-    this.control.appendChild(new DoubleButton('engine', this.car).doubleElement);
-    this.control.appendChild(
+    this.control.append(
+      this.selectBtn.element,
+      this.removeBtn.element,
+      this.startBtn.element,
+      this.stopBtn.element,
       new CreateHTMLElement('div', 'name_car', '', `${this.car.name}`).element,
     );
     this.carHTMLElement = new CreateHTMLElement('div', 'road').element;
@@ -43,8 +53,7 @@ class Car {
       <path d="M73.65 25.27C73.65 25.94 73.77 26.57 73.94 27.18C74.78 30.25 77.57 32.53 80.91 32.53C84.25 32.53 87.03 30.25 87.87 27.18C88.04 26.57 88.16 25.94 88.16 25.27C88.16 21.26 84.91 18.02 80.91 18.02C76.9 18.02 73.65 21.26 73.65 25.27Z" id="a1ZDiiiINl"></path>
       </defs><g><g><use xlink:href="#aytM9WSxr" opacity="1" fill="${this.car.color}" fill-opacity="1"></use><g><use xlink:href="#aytM9WSxr" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g><g><use xlink:href="#ceIsH8VoB" opacity="1" fill="#000000" fill-opacity="1"></use><g><use xlink:href="#ceIsH8VoB" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g><g><use xlink:href="#a1ZDiiiINl" opacity="1" fill="#000000" fill-opacity="1"></use><g><use xlink:href="#a1ZDiiiINl" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g></g></svg>
     `;
-    this.element.appendChild(this.control);
-    this.element.appendChild(this.carHTMLElement);
+    this.element.append(this.control, this.carHTMLElement);
   }
 
   reRender(): void {
@@ -56,7 +65,7 @@ class Car {
     deleteCar(this.car.id);
   }
 
-  reNameCarActive(): boolean {
+  reNameCarActive(): void {
     const colorUpdate = document.getElementById('update_car_color') as HTMLInputElement;
     const nameCarUpdate = document.getElementById('update_car_name') as HTMLInputElement;
     const update = document.getElementById('update_car') as HTMLInputElement;
@@ -67,7 +76,7 @@ class Car {
     update.disabled = false;
   }
 
-  updateCar() {
+  updateCar(): void {
     const colorUpdate = document.getElementById('update_car_color') as HTMLInputElement;
     const nameCarUpdate = document.getElementById('update_car_name') as HTMLInputElement;
     const update = document.getElementById('update_car') as HTMLInputElement;
@@ -78,7 +87,7 @@ class Car {
     colorUpdate.disabled = true;
     update.disabled = true;
   }
-  //===как пробрость this.render из App (в родительскай класс)===
+  //= ==как пробрость this.render из App (в родительскай класс)===
   // reNameCar(fn: any) {
   //   const colorUpdate = document.getElementById('update_car_color') as HTMLInputElement;
   //   const nameCarUpdate = document.getElementById('update_car_name') as HTMLInputElement;

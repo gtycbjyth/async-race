@@ -27,6 +27,7 @@ export const getCars = async (param: string = currentPageCar): Promise<void> => 
     car.engin = false;
     return car;
   });
+  console.log(UIData.carsArr);
 };
 
 export const createCar = async (car: TCarParam): Promise<void> => {
@@ -53,13 +54,13 @@ export const deleteCar = async (id: string): Promise<void> => {
   // TODO delete that car from winner scope=========================
 };
 
-export const updateCar = async (id: string, changes: TCarParam): Promise<void> => {
-  const response = await fetch(`${garageURL}/${id}`, {
+export const updateCar = async (car: TCarParam): Promise<void> => {
+  const response = await fetch(`${garageURL}/${car.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(changes),
+    body: JSON.stringify(car),
   });
   const data = await response.json();
   console.log('updateCar', data);
