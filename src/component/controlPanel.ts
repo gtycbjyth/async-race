@@ -1,8 +1,10 @@
 import { createCar, getCars } from '../api/garage';
+import { createWinner, getWinner, getWinners, updateWinner } from '../api/winners';
 import UIData from '../data/UIData';
 import generateOneHundredCars from '../helper/generateOneHundredCars ';
 import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
+import Car from './car';
 
 class ControlPanel {
   section: HTMLElement;
@@ -42,21 +44,43 @@ class ControlPanel {
     this.render();
   }
 
-  oneHundredCar(): void {
-    const oneHundredCar = generateOneHundredCars();
-    oneHundredCar.forEach((el) => createCar(el));
-    this.generateBtn.element.removeEventListener('click', () => {
-      this.oneHundredCar();
-    });
-    this.reRender();
+  hundredCarBtn(app: any): void {
+    const hundred = async () => {
+      const oneHundredCar = generateOneHundredCars();
+      oneHundredCar.forEach((el) => createCar(el));
+      await getCars();
+      app.render();
+      // this.generateBtn.element.removeEventListener('click', hundred);
+    };
+    this.generateBtn.element.addEventListener('click', hundred);
   }
 
-  addListener(raceInfo: any): void {
-    this.generateBtn.element.addEventListener('click', async () => {
-      await this.oneHundredCar();
-      await getCars();
-      await raceInfo.render();
+  raceAll(arr: Car[]): void {
+    this.raceBtn.element.addEventListener('click', async () => {
+      const win = await Promise.all(arr.map((car) => car.startRace()));
+      const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
+      const winnerArr = await getWinners('s');
+      const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
+      if (findWinner === -1) {
+        await createWinner({
+          id: winners[0].id,
+          wins: 1,
+          time: winners[0].time,
+          // name: winners[0].name,
+        });
+      } else {
+        const winner = winnerArr[findWinner];
+        if (winnerArr[findWinner].time > winners[0].time) {
+          winnerArr[findWinner].time = winners[0].time;
+        }
+        winnerArr[findWinner].wins += 1;
+        await updateWinner(winner);
+      }
     });
   }
+
+  // resetRaceBtn(arr: Car[]): void {
+  //   const win = await Promise.all(arr.map((car) => car.stopRace()));
+  // }
 }
 export default ControlPanel;

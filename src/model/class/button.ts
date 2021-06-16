@@ -1,7 +1,3 @@
-// import { createCar, getCars } from '../../api/garage';
-// // import UIData from '../../data/UIData';
-// import generateOneHundredCars from '../../helper/generateOneHundredCars ';
-// import appNew from '../../index';
 import CreateHTMLElement from './createHTMLElement';
 
 class Button extends CreateHTMLElement {
@@ -46,12 +42,12 @@ class Button extends CreateHTMLElement {
   //   // await appNew.raceInfo.reRender();
   //   // await appNew.carArr.forEach((car) => car.reRender());
   //   await appNew.reRender();
+
   // }
 
   // onClick(event: MouseEvent): void {
   //   const { id } = event.target;
   //   const target = id.split('_');
-  //   console.log('onClick Target', id.split('_'));
 
   //   if (target) {
   //     this[target[0]](event);

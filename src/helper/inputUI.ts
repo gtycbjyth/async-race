@@ -18,12 +18,10 @@ const inputUI = function f(app: any): void {
 
   color.addEventListener('input', () => {
     setTimeout(() => {
-      console.log(UIData.inputNewColor);
-
       UIData.inputNewColor = color.value;
-      console.log(UIData.inputNewColor);
     }, 300);
   });
+
   const newApp = app;
 
   create.addEventListener('click', async () => {
@@ -34,7 +32,6 @@ const inputUI = function f(app: any): void {
     UIData.inputNewValue = '';
     UIData.inputNewColor = '#ff2800';
     await getCars();
-    console.log('submit');
     await newApp.render();
   });
 };

@@ -3,14 +3,16 @@
   border-bottom: 2px dashed #ff2800;
   border-top: 1px solid black;
 }
+:root {
+  --left: 0px;}
 
 .road {
   position: relative;
   height: 35px;
-  >img {
+  >svg {
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: var(--left);
   }
 }
 .car_control {

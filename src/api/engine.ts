@@ -3,27 +3,32 @@ import { baseURL } from './garage';
 
 const engineURL = `${baseURL}/engine`;
 
-export const propEngineStatus = generateRequest([
-  { key: 'id', value: '6' },
-  { key: 'status', value: 'started' },
-]);
-
-const a = [];
-export const startStopEngine = async (prop: string = propEngineStatus): Promise<void> => {
+export const startStopEngine = async (id: string, status: string): Promise<void> => {
+  const prop = generateRequest([
+    { key: 'id', value: `${id}` },
+    { key: 'status', value: `${status}` },
+  ]);
   const response = await fetch(`${engineURL}${prop}`);
-  const date = await response.json();
-  console.log('engine status', date);
+  const data = await response.json();
+  console.log(data);
 
-  a[1] = date;
+  // console.log('engine status', data.velocity, data.distance, 'data', data);
+  return data;
 };
 
-export const propDriveMode = generateRequest([
-  { key: 'id', value: '6' },
-  { key: 'status', value: 'drive' },
-]);
-
-export const driveMode = async (prop: string = propDriveMode): Promise<void> => {
-  const response = await fetch(`${engineURL}${prop}`);
-  const date = await response.json();
-  console.log('driveMode', date);
+export const getEngineStatus = async (id: string): Promise<void | boolean> => {
+  try {
+    const prop = generateRequest([
+      { key: 'id', value: `${id}` },
+      { key: 'status', value: 'drive' },
+    ]);
+    const response = await fetch(`${engineURL}${prop}`);
+    if (response.status === 500) {
+      throw new Error('Engine stop!!!');
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+    return true;
+  }
 };

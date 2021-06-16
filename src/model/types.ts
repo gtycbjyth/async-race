@@ -2,18 +2,23 @@ export type TRequestParam = {
   key: string;
   value: string;
 };
+export type TEngineRequestParam = {
+  distance: number;
+  velocity: number;
+};
 
 export type TCarParam = {
   name: string;
   color: string;
   id?: string;
-  engin?: boolean;
+  engin?: string;
 };
 
 export type TWinParam = {
-  id?: number;
-  wins: number;
+  id?: string;
+  wins?: number;
   time: number;
+  name?: string;
 };
 export type TUIData = {
   createCarName: string;
@@ -22,7 +27,9 @@ export type TUIData = {
   updateCarColor: string;
   totalCars: string;
   carsArr: TCarParam[];
+  allCars: TCarParam[];
   currentPageCar: string;
+  currentPageWinner: string;
   inputNewValue: string;
   inputNewColor: string;
   inputUpdateValue: string;
