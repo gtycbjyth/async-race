@@ -1,5 +1,5 @@
 import { createCar, getCars } from '../api/garage';
-import { createWinner, getWinner, getWinners, updateWinner } from '../api/winners';
+import { createWinner, getWinners, updateWinner } from '../api/winners';
 import UIData from '../data/UIData';
 import generateOneHundredCars from '../helper/generateOneHundredCars ';
 import Button from '../model/class/button';
@@ -61,6 +61,21 @@ class ControlPanel {
       const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
       const winnerArr = await getWinners('s');
       const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
+      console.log(winners[0].id);
+      console.log(arr[Number(winners[0].id) - 1].car);
+      console.log(winners[0].time / 1000);
+      const text = `Winner ${arr[Number(winnerArr[0].id) + 1].car.name}, Color:${
+        arr[Number(winnerArr[0].id) - 1].car.name
+      }, Time:${winners[0].time / 1000}sec.
+      `;
+
+      // const removeWinHTML = () => {};
+      const winHTML = new CreateHTMLElement('div', 'winner_race', '', text);
+      document.body.addEventListener('click', () => {
+        winHTML.element.remove();
+      });
+      document.body.append(winHTML.element);
+
       if (findWinner === -1) {
         await createWinner({
           id: winners[0].id,
