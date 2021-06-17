@@ -42,19 +42,12 @@ export const createCar = async (car: TCarParam): Promise<void> => {
     },
     body: JSON.stringify(car),
   });
-  // await createWinner({
-  //   id: car.id,
-  //   wins: 0,
-  //   time: 0,
-  //   name: car.name,
-  // });
 };
 
 export const deleteCar = async (id: string): Promise<void> => {
   await fetch(`${garageURL}/${id}`, {
     method: 'DELETE',
   });
-  // await deleteWinner(id);
 };
 
 export const updateCar = async (car: TCarParam): Promise<void> => {
