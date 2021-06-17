@@ -1,6 +1,6 @@
 import UIData from '../data/UIData';
 import generateRequest from '../helper/generateRequest';
-import { TCarParam, TWinParam } from '../model/types';
+import { TWinParam } from '../model/types';
 import { baseURL } from './garage';
 
 export const winnerURL = `${baseURL}/winners`;

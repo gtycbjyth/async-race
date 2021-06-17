@@ -1,8 +1,7 @@
-import { driveMode, getEngineStatus, propEngineStatus, startStopEngine } from '../api/engine';
+import { getEngineStatus, startStopEngine } from '../api/engine';
 import { deleteCar, updateCar } from '../api/garage';
 import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
-import DoubleButton from '../model/class/doubleButton';
 import { TCarParam, TWinParam } from '../model/types';
 
 class Car {
@@ -22,10 +21,7 @@ class Car {
 
   stopBtn: Button;
 
-  stopAnimation: any;
-
   constructor(car: TCarParam) {
-    // this.stopAnimation;
     this.car = car;
     this.element = new CreateHTMLElement('div', 'car_road').element;
     this.removeBtn = new Button(`remove_${this.car.id}`, 'remove');
@@ -61,29 +57,6 @@ class Car {
     await deleteCar(this.car.id);
   }
 
-  // async startRace(): Promise<void> {
-  //   this.startBtn.element.disabled = true;
-  //   this.stopBtn.element.disabled = false;
-  //   this.animation(true);
-  //   const engineStatus = await getEngineStatus(this.car.id);
-
-  //   if (engineStatus) {
-  //     console.log(' check if');
-
-  //     this.animation(false);
-  //   }
-  // }
-
-  // async stopRace(): Promise<void> {
-  //   this.animation(false);
-  //   await startStopEngine(this.car.id, this.car.engin);
-  //   const svg = document.getElementById(`${this.car.id}`);
-  //   this.car.engin = 'started';
-  //   this.startBtn.element.disabled = false;
-  //   this.stopBtn.element.disabled = true;
-  //   svg.style.left = '0px';
-  // }
-
   reNameCarActive(): void {
     const colorUpdate = document.getElementById('update_car_color') as HTMLInputElement;
     const nameCarUpdate = document.getElementById('update_car_name') as HTMLInputElement;
@@ -107,39 +80,6 @@ class Car {
     update.disabled = true;
   }
 
-  // async animation(start: boolean): Promise<void> {
-  //   let startTime: number;
-  //   let stopAnimation;
-  //   let progress;
-  //   let setTimeStart = true;
-  //   if (start === false) {
-  //     console.log('got false ');
-  //     cancelAnimationFrame(stopAnimation);
-  //   }
-
-  //   const engineStart = await startStopEngine(this.car.id, this.car.engin);
-  //   this.car.engin = 'stopped';
-  //   const time = Math.floor(engineStart.distance / engineStart.velocity);
-  //   const svg = document.getElementById(`${this.car.id}`);
-
-  //   function step(timestamp: any) {
-  //     this.stopAnimation = window.requestAnimationFrame(step);
-  //     const displayWidth = Math.ceil(document.documentElement.clientWidth * 0.9);
-
-  //     if (setTimeStart) {
-  //       setTimeStart = false;
-  //       startTime = timestamp;
-  //     }
-  //     progress = (timestamp - startTime) / (time / displayWidth);
-  //     svg.style.left = `${progress}px`;
-  //     if (timestamp - startTime > time) {
-  //       cancelAnimationFrame(this.stopAnimation);
-  //     }
-  //   }
-  //   if (start === true) {
-  //     window.requestAnimationFrame(step);
-  //   }
-  // }
   async startRace(): Promise<TWinParam> {
     this.startBtn.element.disabled = true;
     this.stopBtn.element.disabled = false;
@@ -149,12 +89,12 @@ class Car {
     let progress;
     let setTimeStart = true;
 
+    this.car.engin = 'started';
     const engineStart = await startStopEngine(this.car.id, this.car.engin);
-    this.car.engin = 'stopped';
     const time = Math.round(engineStart.distance / engineStart.velocity);
     const svg = document.getElementById(`${this.car.id}`);
 
-    function step(timestamp: any) {
+    function step(timestamp: number) {
       const displayWidth = Math.ceil(document.documentElement.clientWidth * 0.9);
 
       if (setTimeStart) {
@@ -172,13 +112,9 @@ class Car {
     window.requestAnimationFrame(step);
 
     const engineStatus = await getEngineStatus(this.car.id);
-    // console.log('startEngine', await startEngine);
-
     if (engineStatus) {
       cancelAnimationFrame(stopAnimation);
-      // console.log(time);
     } else {
-      console.log('first winner', time);
       const car: TWinParam = {
         id: this.car.id,
         name: this.car.name,
@@ -188,14 +124,14 @@ class Car {
     }
   }
 
-  async stopRace() {
-    cancelAnimationFrame(stopAnimation);
+  async stopRace(): Promise<void> {
     await startStopEngine(this.car.id, this.car.engin);
+    this.car.engin = 'stopped';
     const svg = document.getElementById(`${this.car.id}`);
-    this.car.engin = 'started';
     this.startBtn.element.disabled = false;
     this.stopBtn.element.disabled = true;
     svg.style.left = '0px';
+    this.render();
   }
 }
 export default Car;
