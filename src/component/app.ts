@@ -4,7 +4,6 @@ import CreateHTMLElement from '../model/class/createHTMLElement';
 import Car from './car';
 import ControlPanel from './controlPanel';
 import RaceInfo from './raceInfo';
-import inputUI from '../helper/inputUI';
 import { getCars } from '../api/garage';
 
 class App {
@@ -74,29 +73,8 @@ class App {
       });
     });
 
-    // if (this.listener) this.addListener();
-    this.raceInfo.leafPages();
-
-    inputUI(this.render);
-  }
-
-  async reRender(): Promise<void> {
-    this.element.innerHTML = '';
-    this.controlPanel.generateBtn.element.removeEventListener('click', () => {
-      this.controlPanel.hundredCarBtn(this);
-    });
-    this.render();
-  }
-
-  addListener(): void {
-    this.listener = false;
-    this.controlPanel.hundredCarBtn(this);
-    this.controlPanel.resetRaceBtn(this.carArr);
-    this.controlPanel.raceAll(this.carArr);
     this.raceInfo.leafPages();
   }
-
-  // removeListener() {}
 }
 
 export default App;

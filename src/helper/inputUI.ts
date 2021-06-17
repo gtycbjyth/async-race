@@ -1,7 +1,7 @@
 import { createCar, getCars } from '../api/garage';
 import UIData from '../data/UIData';
 
-const inputUI = function f(app: any): void {
+const inputUI = function f(app: () => void): void {
   const color = document.getElementById('new_car_color') as HTMLInputElement;
   const nameCar = document.getElementById('new_car_name') as HTMLInputElement;
   const create = document.getElementById('new_car_add') as HTMLInputElement;
@@ -22,8 +22,6 @@ const inputUI = function f(app: any): void {
     }, 300);
   });
 
-  const newApp = app;
-
   create.addEventListener('click', async () => {
     createCar({ name: nameCar.value, color: color.value });
     color.value = '#ff2800';
@@ -32,7 +30,7 @@ const inputUI = function f(app: any): void {
     UIData.inputNewValue = '';
     UIData.inputNewColor = '#ff2800';
     await getCars();
-    await newApp.render();
+    app();
   });
 };
 export default inputUI;

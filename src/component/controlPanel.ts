@@ -2,6 +2,7 @@ import { createCar, getCars } from '../api/garage';
 import { createWinner, getWinners, updateWinner } from '../api/winners';
 import UIData from '../data/UIData';
 import generateOneHundredCars from '../helper/generateOneHundredCars ';
+import inputUI from '../helper/inputUI';
 import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
 import Car from './car';
@@ -68,6 +69,9 @@ class ControlPanel {
         this.hundredCarBtn();
       });
     });
+    setTimeout(() => {
+      inputUI(this.renderApp);
+    }, 0);
   }
 
   reRender(): void {
@@ -83,20 +87,16 @@ class ControlPanel {
   }
 
   async raceAll(arr: Car[]): Promise<void> {
-    console.log(arr);
     this.raceBtn.element.disabled = true;
     this.resetBtn.element.disabled = false;
     this.stopRace = true;
     const win = await Promise.all(arr.map((car) => car.startRace()));
-    console.log(win);
 
     const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
     const winnerArr = await getWinners('s');
     const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
 
     if (this.stopRace) {
-      console.log(arr);
-      console.log(winners[0]);
       const text = `Winner ${winners[0].name}, Time:${winners[0].time / 1000}sec.
       `;
 
