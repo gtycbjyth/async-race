@@ -15,7 +15,10 @@ class ControlPanel {
 
   generateBtn: Button;
 
+  stopRace: boolean;
+
   constructor() {
+    this.stopRace = true;
     this.section = new CreateHTMLElement('section', 'input_section').element;
     this.raceBtn = new Button('race', 'race');
     this.resetBtn = new Button('reset', 'reset');
@@ -50,7 +53,6 @@ class ControlPanel {
       oneHundredCar.forEach((el) => createCar(el));
       await getCars();
       app.render();
-      // this.generateBtn.element.removeEventListener('click', hundred);
     };
     this.generateBtn.element.addEventListener('click', hundred);
   }
@@ -61,41 +63,43 @@ class ControlPanel {
       const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
       const winnerArr = await getWinners('s');
       const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
-      console.log(winners[0].id);
-      console.log(arr[Number(winners[0].id) - 1].car);
-      console.log(winners[0].time / 1000);
-      const text = `Winner ${arr[Number(winnerArr[0].id) + 1].car.name}, Color:${
-        arr[Number(winnerArr[0].id) - 1].car.name
-      }, Time:${winners[0].time / 1000}sec.
+
+      if (this.stopRace) {
+        const text = `Winner ${arr[Number(winners[0].id) - 1].car.name}, Time:${
+          winners[0].time / 1000
+        }sec.
       `;
 
-      // const removeWinHTML = () => {};
-      const winHTML = new CreateHTMLElement('div', 'winner_race', '', text);
-      document.body.addEventListener('click', () => {
-        winHTML.element.remove();
-      });
-      document.body.append(winHTML.element);
-
-      if (findWinner === -1) {
-        await createWinner({
-          id: winners[0].id,
-          wins: 1,
-          time: winners[0].time,
-          // name: winners[0].name,
+        const winHTML = new CreateHTMLElement('div', 'winner_race', '', text);
+        document.body.addEventListener('click', () => {
+          winHTML.element.remove();
         });
-      } else {
-        const winner = winnerArr[findWinner];
-        if (winnerArr[findWinner].time > winners[0].time) {
-          winnerArr[findWinner].time = winners[0].time;
+        document.body.append(winHTML.element);
+
+        if (findWinner === -1) {
+          await createWinner({
+            id: winners[0].id,
+            wins: 1,
+            time: winners[0].time,
+          });
+        } else {
+          const winner = winnerArr[findWinner];
+          if (winnerArr[findWinner].time > winners[0].time) {
+            winnerArr[findWinner].time = winners[0].time;
+          }
+          winnerArr[findWinner].wins += 1;
+          await updateWinner(winner);
         }
-        winnerArr[findWinner].wins += 1;
-        await updateWinner(winner);
       }
+      this.stopRace = true;
     });
   }
 
-  // resetRaceBtn(arr: Car[]): void {
-  //   const win = await Promise.all(arr.map((car) => car.stopRace()));
-  // }
+  resetRaceBtn(arr: Car[]): void {
+    this.stopRace = false;
+    this.resetBtn.element.addEventListener('click', async () => {
+      await Promise.all(arr.map((car) => car.stopRace()));
+    });
+  }
 }
 export default ControlPanel;

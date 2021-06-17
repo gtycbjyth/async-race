@@ -90,7 +90,7 @@ class App {
     this.listener = false;
     this.controlPanel.hundredCarBtn(this);
     this.controlPanel.raceAll(this.carArr);
-    // this.controlPanel.resetRaceBtn(this.carArr);
+    this.controlPanel.resetRaceBtn(this.carArr);
     this.raceInfo.leafPages();
   }
 
