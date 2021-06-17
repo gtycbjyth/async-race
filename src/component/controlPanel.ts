@@ -128,7 +128,6 @@ class ControlPanel {
     this.raceBtn.element.disabled = false;
     this.resetBtn.element.disabled = true;
     this.stopRace = false;
-    console.log('resetRaceBtn---this.stopRace', this.stopRace);
     await Promise.all(arr.map((car) => car.stopRace()));
   }
 }

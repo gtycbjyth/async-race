@@ -25,8 +25,6 @@ class RaceInfo {
   render(): void {
     this.section.innerHTML = '';
     if (Number(UIData.totalCars) <= 7) {
-      console.log(UIData.totalCars);
-
       this.prevBtn.element.disabled = true;
       this.nextBtn.element.disabled = true;
     }
