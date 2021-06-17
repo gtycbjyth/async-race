@@ -4,7 +4,7 @@ import CreateHTMLElement from '../model/class/createHTMLElement';
 import Car from './car';
 import ControlPanel from './controlPanel';
 import RaceInfo from './raceInfo';
-// import inputUI from '../helper/inputUI';
+import inputUI from '../helper/inputUI';
 import { getCars } from '../api/garage';
 
 class App {
@@ -25,8 +25,6 @@ class App {
   constructor() {
     this.listener = true;
     this.element = document.body;
-    this.controlPanel = new ControlPanel();
-    this.raceInfo = new RaceInfo(this.render.bind(this));
     this.header = new CreateHTMLElement('header').element;
     this.header.append(
       new Button('garage', 'garage').element,
@@ -38,11 +36,13 @@ class App {
 
   async render(): Promise<void> {
     this.element.innerHTML = '';
+    this.carArr = UIData.carsArr.map((car) => new Car(car));
+    this.controlPanel = new ControlPanel(this.carArr, this.render.bind(this));
     this.controlPanel.render();
+    this.raceInfo = new RaceInfo(this.render.bind(this));
     this.raceInfo.render();
 
     this.element.append(this.header, this.main, this.controlPanel.section, this.raceInfo.section);
-    this.carArr = UIData.carsArr.map((car) => new Car(car));
     this.carArr.forEach((car) => {
       car.render();
       this.element.appendChild(car.element);
@@ -74,8 +74,10 @@ class App {
       });
     });
 
-    if (this.listener) this.addListener();
-    // inputUI(this.render);
+    // if (this.listener) this.addListener();
+    this.raceInfo.leafPages();
+
+    inputUI(this.render);
   }
 
   async reRender(): Promise<void> {
@@ -86,11 +88,11 @@ class App {
     this.render();
   }
 
-  addListener() {
+  addListener(): void {
     this.listener = false;
     this.controlPanel.hundredCarBtn(this);
-    this.controlPanel.raceAll(this.carArr);
     this.controlPanel.resetRaceBtn(this.carArr);
+    this.controlPanel.raceAll(this.carArr);
     this.raceInfo.leafPages();
   }
 

@@ -17,8 +17,14 @@ class ControlPanel {
 
   stopRace: boolean;
 
-  constructor() {
+  app;
+
+  renderApp: () => void;
+
+  constructor(app: Car[], renderApp: () => void) {
     this.stopRace = true;
+    this.renderApp = renderApp;
+    this.app = app;
     this.section = new CreateHTMLElement('section', 'input_section').element;
     this.raceBtn = new Button('race', 'race');
     this.resetBtn = new Button('reset', 'reset');
@@ -39,7 +45,29 @@ class ControlPanel {
       <input type="submit" id="update_car" value="update" disabled>
     </div>
     `;
+    this.resetBtn.element.disabled = true;
     this.section.append(this.raceBtn.element, this.resetBtn.element, this.generateBtn.element);
+
+    this.raceBtn.element.addEventListener('click', async () => {
+      await this.raceAll(this.app);
+      this.raceBtn.element.removeEventListener('click', async () => {
+        this.raceAll(this.app);
+      });
+    });
+
+    this.resetBtn.element.addEventListener('click', async () => {
+      await this.resetRaceBtn(this.app);
+      this.resetBtn.element.removeEventListener('click', async () => {
+        this.resetRaceBtn(this.app);
+      });
+    });
+
+    this.generateBtn.element.addEventListener('click', async () => {
+      await this.hundredCarBtn();
+      this.generateBtn.element.removeEventListener('click', async () => {
+        this.hundredCarBtn();
+      });
+    });
   }
 
   reRender(): void {
@@ -47,59 +75,61 @@ class ControlPanel {
     this.render();
   }
 
-  hundredCarBtn(app: any): void {
-    const hundred = async () => {
-      const oneHundredCar = generateOneHundredCars();
-      oneHundredCar.forEach((el) => createCar(el));
-      await getCars();
-      app.render();
-    };
-    this.generateBtn.element.addEventListener('click', hundred);
+  async hundredCarBtn(): Promise<void> {
+    const oneHundredCar = generateOneHundredCars();
+    oneHundredCar.forEach((el) => createCar(el));
+    await getCars();
+    await this.renderApp();
   }
 
-  raceAll(arr: Car[]): void {
-    this.raceBtn.element.addEventListener('click', async () => {
-      const win = await Promise.all(arr.map((car) => car.startRace()));
-      const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
-      const winnerArr = await getWinners('s');
-      const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
+  async raceAll(arr: Car[]): Promise<void> {
+    console.log(arr);
+    this.raceBtn.element.disabled = true;
+    this.resetBtn.element.disabled = false;
+    this.stopRace = true;
+    const win = await Promise.all(arr.map((car) => car.startRace()));
+    console.log(win);
 
-      if (this.stopRace) {
-        const text = `Winner ${arr[Number(winners[0].id) - 1].car.name}, Time:${
-          winners[0].time / 1000
-        }sec.
+    const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
+    const winnerArr = await getWinners('s');
+    const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
+
+    if (this.stopRace) {
+      console.log(arr);
+      console.log(winners[0]);
+      const text = `Winner ${winners[0].name}, Time:${winners[0].time / 1000}sec.
       `;
 
-        const winHTML = new CreateHTMLElement('div', 'winner_race', '', text);
-        document.body.addEventListener('click', () => {
-          winHTML.element.remove();
-        });
-        document.body.append(winHTML.element);
+      const winHTML = new CreateHTMLElement('div', 'winner_race', '', text);
+      document.body.addEventListener('click', () => {
+        winHTML.element.remove();
+      });
+      document.body.append(winHTML.element);
 
-        if (findWinner === -1) {
-          await createWinner({
-            id: winners[0].id,
-            wins: 1,
-            time: winners[0].time,
-          });
-        } else {
-          const winner = winnerArr[findWinner];
-          if (winnerArr[findWinner].time > winners[0].time) {
-            winnerArr[findWinner].time = winners[0].time;
-          }
-          winnerArr[findWinner].wins += 1;
-          await updateWinner(winner);
+      if (findWinner === -1) {
+        await createWinner({
+          id: winners[0].id,
+          wins: 1,
+          time: winners[0].time,
+        });
+      } else {
+        const winner = winnerArr[findWinner];
+        if (winnerArr[findWinner].time > winners[0].time) {
+          winnerArr[findWinner].time = winners[0].time;
         }
+        winnerArr[findWinner].wins += 1;
+        await updateWinner(winner);
       }
-      this.stopRace = true;
-    });
+    }
+    this.stopRace = true;
   }
 
-  resetRaceBtn(arr: Car[]): void {
+  async resetRaceBtn(arr: Car[]): Promise<void> {
+    this.raceBtn.element.disabled = false;
+    this.resetBtn.element.disabled = true;
     this.stopRace = false;
-    this.resetBtn.element.addEventListener('click', async () => {
-      await Promise.all(arr.map((car) => car.stopRace()));
-    });
+    console.log('resetRaceBtn---this.stopRace', this.stopRace);
+    await Promise.all(arr.map((car) => car.stopRace()));
   }
 }
 export default ControlPanel;

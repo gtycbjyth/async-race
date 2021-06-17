@@ -2,7 +2,6 @@ import { getCars } from '../api/garage';
 import UIData from '../data/UIData';
 import Button from '../model/class/button';
 import CreateHTMLElement from '../model/class/createHTMLElement';
-// import App from './app';
 import CarRoad from './car';
 
 class RaceInfo {
@@ -71,15 +70,13 @@ class RaceInfo {
       UIData.currentPageCar = String(Number(UIData.currentPageCar) - 1);
       await getCars();
       this.appRender();
-      // this.prevBtn.element.removeEventListener('click', prev);
     };
     this.prevBtn.element.addEventListener('click', prev);
 
     const nextPage = async () => {
       UIData.currentPageCar = String(Number(UIData.currentPageCar) + 1);
-      getCars();
+      await getCars();
       this.appRender();
-      // this.prevBtn.element.removeEventListener('click', nextPage);
     };
     this.nextBtn.element.addEventListener('click', nextPage);
   }
