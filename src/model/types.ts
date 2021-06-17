@@ -26,8 +26,12 @@ export type TUIData = {
   updateCarName: string;
   updateCarColor: string;
   totalCars: string;
+  totalCarsWin: string;
   carsArr: TCarParam[];
   allCars: TCarParam[];
+  winCars: TWinParam[];
+  sortWin: string;
+  typeOrder: string;
   currentPageCar: string;
   currentPageWinner: string;
   inputNewValue: string;

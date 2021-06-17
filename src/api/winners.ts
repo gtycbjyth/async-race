@@ -13,60 +13,48 @@ export const getWinner = async (id: string): Promise<void | boolean> => {
     }
     const data = await response.json();
     return data;
-    console.log('getWinner', data, response.status);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return true;
   }
 };
 
-let totalWinners = '1';
-
 export const getWinners = async (param = 'all'): Promise<[TWinParam]> => {
   const currentWinners: string = generateRequest([
     { key: '_page', value: UIData.currentPageWinner },
     { key: '_limit', value: '7' },
-    { key: '_sort', value: 'time' },
-    { key: '_order', value: 'ASC' },
+    { key: '_sort', value: UIData.sortWin },
+    { key: '_order', value: UIData.typeOrder },
   ]);
   const string = param === 'all' ? '' : currentWinners;
   const response = await fetch(`${winnerURL}${string}`);
-  const data = await response.json();
-  totalWinners = response.headers.get('X-Total-Count');
-  console.log('getWinners', data);
-  console.log('totalWinners', totalWinners);
-  return data;
+  UIData.winCars = await response.json();
+  UIData.totalCarsWin = response.headers.get('X-Total-Count');
 };
 
 export const createWinner = async (param: TWinParam): Promise<void> => {
-  const response = await fetch(`${winnerURL}`, {
+  await fetch(`${winnerURL}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(param),
   });
-  const data = response.json();
-  console.log('createWinner', data);
 };
 
 export const deleteWinner = async (id: string): Promise<void> => {
-  const response = await fetch(`${winnerURL}/${id}`, {
+  await fetch(`${winnerURL}/${id}`, {
     method: 'DELETE',
   });
-  const data = response.json();
-  console.log('deleted Winner', data);
 };
 
 export const updateWinner = async (param: TWinParam): Promise<void> => {
-  const response = await fetch(`${winnerURL}/${param.id}`, {
+  await fetch(`${winnerURL}/${param.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(param),
   });
-  const data = response.json();
-  console.log('updateWinner', data);
 };

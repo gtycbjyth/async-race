@@ -83,6 +83,7 @@ class ControlPanel {
     const oneHundredCar = generateOneHundredCars();
     oneHundredCar.forEach((el) => createCar(el));
     await getCars();
+    await getCars('all');
     await this.renderApp();
   }
 
@@ -91,10 +92,10 @@ class ControlPanel {
     this.resetBtn.element.disabled = false;
     this.stopRace = true;
     const win = await Promise.all(arr.map((car) => car.startRace()));
-
     const winners = win.filter(async (a) => a !== undefined).sort((a, b) => a.time - b.time);
-    const winnerArr = await getWinners('s');
-    const findWinner: number = winnerArr.findIndex((x) => x.id === winners[0].id);
+    await getWinners('all');
+
+    const findWinner: number = UIData.winCars.findIndex((x) => x.id === winners[0].id);
 
     if (this.stopRace) {
       const text = `Winner ${winners[0].name}, Time:${winners[0].time / 1000}sec.
@@ -113,11 +114,11 @@ class ControlPanel {
           time: winners[0].time,
         });
       } else {
-        const winner = winnerArr[findWinner];
-        if (winnerArr[findWinner].time > winners[0].time) {
-          winnerArr[findWinner].time = winners[0].time;
+        const winner = UIData.winCars[findWinner];
+        if (UIData.winCars[findWinner].time > winners[0].time) {
+          UIData.winCars[findWinner].time = winners[0].time;
         }
-        winnerArr[findWinner].wins += 1;
+        UIData.winCars[findWinner].wins += 1;
         await updateWinner(winner);
       }
     }

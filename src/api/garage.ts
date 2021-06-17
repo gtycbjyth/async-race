@@ -31,6 +31,7 @@ export const getCars = async (prop: string | null = null): Promise<void> => {
       car.engin = 'started';
       return car;
     });
+    // console.log('garage - cars', UIData.allCars);
   }
 };
 
